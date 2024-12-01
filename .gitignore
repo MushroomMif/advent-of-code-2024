@@ -1,0 +1,9 @@
+input.txt
+
+### IntelliJ IDEA ###
+out/
+.idea/
+*.iml
+
+### Kotlin ###
+.kotlin
