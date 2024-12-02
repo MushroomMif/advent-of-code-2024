@@ -32,3 +32,17 @@ fun parseTwoIntListsFromInput(): Pair<MutableList<Int>, MutableList<Int>>? {
         return null
     }
 }
+
+fun parseHorizontalIntListsFromInput(): List<List<Int>>? {
+    val input = readInput()?.lines() ?: return null
+
+    try {
+        return input.map { line ->
+            line.split(" ").map { it.toInt() }
+        }
+    } catch (e: Exception) {
+        println("Failed to parse horizontal int lists from the input file")
+        e.printStackTrace()
+        return null
+    }
+}
