@@ -38,7 +38,7 @@ fun parseHorizontalIntListsFromInput(): List<List<Int>>? {
 
     try {
         return input.map { line ->
-            line.split(" ").map { it.toInt() }
+            line.split(" ").map(String::toInt)
         }
     } catch (e: Exception) {
         println("Failed to parse horizontal int lists from the input file")
