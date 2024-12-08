@@ -1,9 +1,15 @@
-input.txt
+### Project ###
+cache/
+.env
 
 ### IntelliJ IDEA ###
 out/
 .idea/
 *.iml
+
+### Gradle ###
+build/
+.gradle/
 
 ### Kotlin ###
 .kotlin
