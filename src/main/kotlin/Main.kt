@@ -1,71 +1,59 @@
 import io.github.classgraph.ClassGraph
-import io.github.classgraph.MethodInfo
 import java.awt.Toolkit
 import java.awt.datatransfer.StringSelection
+import kotlin.time.TimeSource
 
-val currentDay: AdventOfCodeDay = AdventOfCodeDay(2024, 7)
+const val YEAR: Int = 2024
+const val CURRENT_DAY: Int = 8
 
 fun main() {
-    val currentDayData = AOCDayData(currentDay)
-    val solvers = findSolutions()[currentDayData]?.map { constructor ->
-        try {
-            constructor.loadClassAndGetConstructor().newInstance() as ProblemSolver
-        } catch (e: IllegalArgumentException) {
-            error("Primary constructor of a ProblemSolver class for $currentDay should not have any parameters")
-        }
-    } ?: error("No solvers detected for current day $currentDay")
+    val solver = findCurrentSolver()
+    println("===== YEAR $YEAR Day $CURRENT_DAY =====")
 
-    println("====== Year ${currentDayData.year} Day ${currentDayData.day} ======")
-    if (solvers.size == 1) {
-        printAnswers(solvers.first())
-    } else {
-        for (solver in solvers) {
-            println("Running ${solver::class.simpleName}:")
-            printAnswers(solver, copyAnswerToClipboard = false)
-        }
-    }
-}
+    val timeSource = TimeSource.Monotonic
+    val startTimeMark = timeSource.markNow()
 
-private fun printAnswers(solver: ProblemSolver, copyAnswerToClipboard: Boolean = true) {
     val firstAnswer = solver.solveFirstPart()?.toString()
     val secondAnswer = solver.solveSecondPart()?.toString()
 
     if (firstAnswer == null && secondAnswer == null) {
-         println("No answers were provided")
-         return
+        println("No answers were provided")
+        return
     }
 
+    val endTimeMark = timeSource.markNow()
     firstAnswer?.let { println("Answer to first part: $it") }
     secondAnswer?.let { println("Answer to second part: $it") }
 
-    if (!copyAnswerToClipboard) return
-    val toCopy = if (secondAnswer != null) secondAnswer else firstAnswer
+    println("All tasks completed in ${endTimeMark - startTimeMark}")
+
+    val toCopy = secondAnswer ?: firstAnswer
     val clipboard = Toolkit.getDefaultToolkit().systemClipboard
     clipboard.setContents(StringSelection(toCopy), null)
 }
 
-private fun findSolutions(): Map<AOCDayData, MutableSet<MethodInfo>> {
-    return buildMap {
-        ClassGraph()
-            .enableClassInfo()
-            .enableMethodInfo()
-            .enableAnnotationInfo()
-            .acceptPackages("solutions")
-            .scan()
-            .getClassesWithAnnotation(AdventOfCodeDay::class.java)
-            .forEach { markedClass ->
-                if (!markedClass.implementsInterface(ProblemSolver::class.java)) {
-                    error("Marked with AdventOfCodeDay class ${markedClass.name} does not implement ProblemSolver interface")
-                }
-
-                val annotationParams = markedClass.annotationInfo
-                    .first { info -> info.classInfo.name == "AdventOfCodeDay" }
-                    .parameterValues
-                val year = annotationParams["year"].value as Int
-                val day = annotationParams["day"].value as Int
-
-                val classPrimaryConstructor = markedClass.constructorInfo.first()
-                getOrPut(AOCDayData(year, day)) { mutableSetOf() } += classPrimaryConstructor
+private fun findCurrentSolver(): ProblemSolver {
+    ClassGraph()
+        .enableClassInfo()
+        .enableMethodInfo()
+        .enableAnnotationInfo()
+        .acceptPackages("solutions")
+        .scan()
+        .allClasses
+        .forEach { solverClass ->
+            val day = try {
+                solverClass.simpleName.substringAfter("Day").toInt()
+            } catch (_: NumberFormatException) {
+                return@forEach
             }
-    }
+            if (day != CURRENT_DAY) return@forEach
+
+            if (!solverClass.implementsInterface(ProblemSolver::class.java)) {
+                error("Class for solving day $day AoC problem does not implement ProblemSolver interface!")
+            }
+
+            return solverClass.constructorInfo.first().loadClassAndGetConstructor().newInstance() as ProblemSolver
+        }
+
+    error("Problem solver fdr day $CURRENT_DAY was not found in solutions package")
 }

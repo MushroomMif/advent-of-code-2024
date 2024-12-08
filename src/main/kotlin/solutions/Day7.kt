@@ -1,10 +1,8 @@
 package solutions
 
-import AdventOfCodeDay
 import ProblemSolver
 import input
 
-@AdventOfCodeDay(2024, 7)
 class Day7: ProblemSolver {
     private val equations: Map<Long, MutableList<List<Long>>> = buildMap {
         for (line in input.lines()) {

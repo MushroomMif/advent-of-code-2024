@@ -4,4 +4,4 @@ interface ProblemSolver {
 }
 
 val ProblemSolver.input: String
-    inline get() = getOrDownloadTodayInput()
+    inline get() = getOrDownloadInput()

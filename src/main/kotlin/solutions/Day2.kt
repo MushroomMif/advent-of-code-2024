@@ -1,13 +1,11 @@
 package solutions
 
-import AdventOfCodeDay
 import ProblemSolver
 import input
 import kotlin.math.abs
 
 private typealias IntChecker = (Int, Int) -> Boolean
 
-@AdventOfCodeDay(2024, 2)
 class Day2: ProblemSolver {
     val lists = input.lines().map { line ->
         line.split(" ").map(String::toInt)

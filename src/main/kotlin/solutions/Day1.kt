@@ -1,11 +1,9 @@
 package solutions
 
-import AdventOfCodeDay
 import ProblemSolver
 import input
 import kotlin.math.abs
 
-@AdventOfCodeDay(2024, 1)
 class Day1: ProblemSolver {
     private val firstList = input.lines()
         .map { it.substringBefore("   ").toInt() }

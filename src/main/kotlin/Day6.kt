@@ -1,7 +1,5 @@
 import kotlin.properties.Delegates
 
-private data class Vec2i(var x: Int, var y: Int)
-
 private enum class Direction {
     UP {
         override fun turn(): Direction = RIGHT
