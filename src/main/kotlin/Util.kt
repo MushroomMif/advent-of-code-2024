@@ -21,6 +21,10 @@ data class Vec2i(var x: Int, var y: Int) {
             (other.x - this.x).toDouble().pow(2) + (other.y - this.y).toDouble().pow(2)
         )
     }
+
+    operator fun plus(other: Vec2i): Vec2i {
+        return Vec2i(this.x + other.x, this.y + other.y)
+    }
 }
 
 fun <T> parseMap(input: String, emptyMark: Char = '.', creator: (Vec2i, Char) -> T): List<T> {
