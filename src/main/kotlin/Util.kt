@@ -37,3 +37,6 @@ fun <T> parseMap(input: String, emptyMark: Char = '.', creator: (Vec2i, Char) ->
         }
     }
 }
+
+val Int.isEven: Boolean
+    inline get() = this % 2 == 0
