@@ -1,27 +1,5 @@
 import kotlin.properties.Delegates
 
-private enum class Direction {
-    UP {
-        override fun turn(): Direction = RIGHT
-        override fun move(pos: Vec2i): Vec2i = pos.copy(y = pos.y - 1)
-    },
-    RIGHT {
-        override fun turn(): Direction = DOWN
-        override fun move(pos: Vec2i): Vec2i = pos.copy(x = pos.x + 1)
-    },
-    DOWN {
-        override fun turn(): Direction = LEFT
-        override fun move(pos: Vec2i): Vec2i = pos.copy(y = pos.y + 1)
-    },
-    LEFT {
-        override fun turn(): Direction = UP
-        override fun move(pos: Vec2i): Vec2i = pos.copy(x = pos.x - 1)
-    };
-
-    abstract fun turn(): Direction
-    abstract fun move(pos: Vec2i): Vec2i
-}
-
 private val INITIAL_DIRECTION = Direction.UP
 
 private enum class TryMoveResult {
@@ -59,7 +37,7 @@ fun main() {
                 allGuardPositions += newPos
             }
             TryMoveResult.BLOCK -> {
-                direction = direction.turn()
+                direction = direction.turnRight()
             }
             TryMoveResult.WIN -> {
                 break
@@ -92,7 +70,7 @@ fun main() {
                     steps++
                 }
                 TryMoveResult.BLOCK -> {
-                    direction = direction.turn()
+                    direction = direction.turnRight()
                 }
                 TryMoveResult.WIN -> {
                     break

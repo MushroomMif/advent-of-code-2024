@@ -4,7 +4,7 @@ import java.awt.datatransfer.StringSelection
 import kotlin.time.TimeSource
 
 const val YEAR: Int = 2024
-const val CURRENT_DAY: Int = 11
+const val CURRENT_DAY: Int = 12
 
 fun main() {
     val solver = findCurrentSolver()
