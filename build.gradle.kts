@@ -14,4 +14,5 @@ dependencies {
     ktor("client-core")
     ktor("client-cio")
     implementation("io.github.classgraph:classgraph:4.8.179")
+    implementation("io.github.cdimascio:dotenv-kotlin:6.4.2")
 }

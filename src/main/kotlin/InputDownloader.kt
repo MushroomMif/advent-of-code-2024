@@ -1,3 +1,4 @@
+import io.github.cdimascio.dotenv.dotenv
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.request.*
@@ -36,10 +37,6 @@ private suspend fun downloadInput(): String {
 }
 
 private fun readAOCSession(): String {
-    val envFile = Path(".env")
-    if (envFile.notExists()) {
-        error(".env file does not exist! You shuld specify AOC_SESSION there")
-    }
-
-    return envFile.readLines().first().substringAfter("AOC_SESSION=")
+    val dotenv = dotenv()
+    return dotenv["AOC_SESSION"]
 }
